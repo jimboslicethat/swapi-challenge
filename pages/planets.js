@@ -5,21 +5,39 @@ import { baseUrl, httpGet } from '../src/requests'
 
 const Planets = (props) => {
   const [planets, setPlanets] = useState([])
+  const [fetchMoreUrl, setFetchMoreUrl] = useState('')
+  const [shouldFetchMore, setShouldFetchMore] = useState(false)
 
+  async function fetchPlanets(url = `${baseUrl}/planets`) {
+    const response = await httpGet(url)
+    
+    const {results: planetsHTTPResult, next: nextPageUrl} = response
+
+    setPlanets([...planets, ...planetsHTTPResult])
+    setFetchMoreUrl(nextPageUrl)
+  }
+
+  // Initial load
   useEffect(() => {
-    async function fetchPlanets() {
-      const response = await httpGet(`${baseUrl}/planets`)
-      const {results: planetsHTTPResult} = response
-
-      setPlanets(planetsHTTPResult)
-    }
-
     fetchPlanets()
   }, [])
+
+  // Pagination
+  useEffect(() => {
+    if (shouldFetchMore && fetchMoreUrl) {
+      fetchPlanets(fetchMoreUrl)
+      setShouldFetchMore(false)
+    }
+  }, [fetchMoreUrl, shouldFetchMore])
+  
+  const handleLoadMore = () => {
+    setShouldFetchMore(true)
+  }
 
   return (
     <main>
       <h1>Planets</h1>
+      <span>Total results: {planets.length}</span>
       <hr />
 
       <table>
@@ -52,6 +70,9 @@ const Planets = (props) => {
           })}
         </tbody>
       </table>
+
+      <br/>
+      <button onClick={handleLoadMore}>Load more</button>
     </main>
   )
 }
