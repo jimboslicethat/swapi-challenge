@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { getFromSwapi } from '../src/requests'
+import { baseUrl, httpGet } from '../src/requests'
 
 
 const Films = (props) => {
@@ -8,7 +8,7 @@ const Films = (props) => {
 
   useEffect(() => {
     async function fetchFilms() {
-      const response = await getFromSwapi('films')
+      const response = await httpGet(`${baseUrl}/films`)
       const {results: filmsHttpResponse} = response
 
       setFilms(filmsHttpResponse)

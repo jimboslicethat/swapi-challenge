@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { getFromSwapi } from '../src/requests'
+import { baseUrl, httpGet } from '../src/requests'
 
 
 const Characters = (props) => {
@@ -8,7 +8,7 @@ const Characters = (props) => {
 
   useEffect(() => {
     async function fetchPeople() {
-      const response = await getFromSwapi('people')
+      const response = await httpGet(`${baseUrl}/people`)
       const {results: peopleHttpResponse} = response
 
       setPeople(peopleHttpResponse)

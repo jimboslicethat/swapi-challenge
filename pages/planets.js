@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { getFromSwapi } from '../src/requests'
+import { baseUrl, httpGet } from '../src/requests'
 
 
 const Planets = (props) => {
@@ -8,7 +8,7 @@ const Planets = (props) => {
 
   useEffect(() => {
     async function fetchPlanets() {
-      const response = await getFromSwapi('planets')
+      const response = await httpGet(`${baseUrl}/planets`)
       const {results: planetsHTTPResult} = response
 
       setPlanets(planetsHTTPResult)
