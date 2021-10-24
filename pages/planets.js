@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { baseUrl, httpGet } from '../src/requests'
+import Table from '../src/Table'
 
 
 const Planets = (props) => {
@@ -40,36 +41,7 @@ const Planets = (props) => {
       <span>Total results: {planets.length}</span>
       <hr />
 
-      <table>
-        <thead>
-        <tr>
-          {planets.length > 0
-            ? Object.keys(planets[0]).map(header => {
-            return (
-              <th key={header}>{header}</th>
-            )})
-            : null
-        }
-        </tr>
-        </thead>
-        <tbody>
-          {planets.map(planet => {
-            const entries = Object.entries(planet)
-            return (
-              <tr key={planet.name}>
-                {
-                  entries.map(entry => {
-                    const [key, value] = entry
-                    return (
-                        <td key={key}>{value}</td>
-                    )
-                  })
-                }
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <Table data={planets} />
 
       <br/>
       <button onClick={handleLoadMore}>Load more</button>
