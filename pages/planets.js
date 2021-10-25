@@ -14,8 +14,32 @@ const Planets = (props) => {
     
     const {results: planetsHTTPResult, next: nextPageUrl} = response
 
-    setPlanets([...planets, ...planetsHTTPResult])
+    const planetsWithResidents = await fetchPlanetsResidents(planetsHTTPResult)
+
+    setPlanets([...planets, ...planetsWithResidents])
     setFetchMoreUrl(nextPageUrl)
+  }
+
+  // fetch the residents of each planet
+  async function fetchPlanetsResidents(planets) {
+    const planetsWithResidentsPromises = planets.map(async planet => {
+      const { residents } = planet
+
+      const residentNamePromises = await residents.map(async residentUrl => {
+        const data = await httpGet(residentUrl)
+
+        return data.name
+      })
+
+      const residentNames = await Promise.all(residentNamePromises)
+
+      return {
+        ...planet,
+        residents: residentNames
+      }
+    })
+
+    return await Promise.all(planetsWithResidentsPromises)
   }
 
   // Initial load
