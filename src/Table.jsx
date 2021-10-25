@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Table as ChakraTable, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
 import PropTypes from 'prop-types'
 
 const Table = (props) => {
@@ -12,33 +13,33 @@ const Table = (props) => {
   }, [data])
 
   return (
-    <table>
-      <thead>
-        <tr>
-          {headerList.map(header => <th key={header}>{header}</th>)}
-        </tr>
-      </thead>
-      <tbody>
+    <ChakraTable size="sm">
+      <Thead>
+        <Tr>
+          {headerList.map(header => <Th key={header}>{header}</Th>)}
+        </Tr>
+      </Thead>
+      <Tbody>
         {data.map(row => {
           const entries = Object.entries(row)
 
           return (
-            <tr key={entries[0]}>
+            <Tr key={entries[0]}>
               {entries.map(entry => {
                 const [key, value] = entry
   
                 return (
-                  <td key={key}>
+                  <Td key={key}>
                     {value}
-                  </td>
+                  </Td>
                 )
               })}
-            </tr>
+            </Tr>
           )
         })
         }
-      </tbody>
-    </table>
+      </Tbody>
+    </ChakraTable>
   )
 }
 
